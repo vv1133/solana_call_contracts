@@ -5,7 +5,8 @@ const { PublicKey, SystemProgram, TransactionInstruction, Transaction, Keypair }
 
 const devnet = "https://devnet.helius-rpc.com/?api-key=c9affd08-e1fb-4085-9b1f-0c36914534b6";
 
-const programId = new PublicKey('CrMWLPYrya9Y99EUNsL1WpdEvZBDtFH3vUd7EmCux7ei');
+//const programId = new PublicKey('CrMWLPYrya9Y99EUNsL1WpdEvZBDtFH3vUd7EmCux7ei');
+const programId = new PublicKey('THhC6kEK5jMKrGwD1PdAAdWbH3J5vtLVm6TCFhy57cp');
 const connection = new web3.Connection(devnet);
 
 const payer = Keypair.fromSecretKey(
@@ -39,7 +40,7 @@ class InstructionData {
   // 创建指令数据对象
   const instructionData = new InstructionData({
     vault_bump_seed: valutPDABump,
-    lamports: 1000000
+    lamports: 10000000
   });
   
   // 序列化指令数据
@@ -49,7 +50,8 @@ class InstructionData {
   const instruction = new TransactionInstruction({
     keys: [
       { pubkey: payer.publicKey, isSigner: true, isWritable: true },
-      { pubkey: vaultPDAPublicKey, isSigner: false, isWritable: true }
+      { pubkey: vaultPDAPublicKey, isSigner: false, isWritable: true },
+      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false } // 必须要，用于合约创建账户时签名
     ],
     programId: programId,
     data: data // 序列化后的指令数据
